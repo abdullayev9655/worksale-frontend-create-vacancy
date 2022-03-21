@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/responsive.css" rel="stylesheet" />
+    <title>Worksale</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="/js/jquery.js" defer></script>
+    <script src="/js/popper.min.js" defer></script>
+    <script src="/js/chosen.min.js" defer></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/jquery-ui.min.js" defer></script>
+    <script src="/js/jquery.fancybox.js" defer></script>
+    <script src="/js/jquery.modal.min.js" defer></script>
+    <script src="/js/mmenu.polyfills.js" defer></script>
+    <script src="/js/mmenu.js" defer></script>
+    <script src="/js/appear.js" defer></script>
+    <script src="/js/script.js" defer></script>
+    <style>
+      .header-black {
+        background-color: #343338;
+      }
+      .user-dashboard {
+        margin-top: 25px;
+      }
+      .widget-content {
+        padding: 0 0 10px !important;
+      }
+      .title-outer h1 {
+        text-align: left;
+        font-size: 36px;
+      }
+      .step_by_step {
+        background: #f7f8fc;
+        min-height: 55px;
+      }
+      .step_by_step .line {
+        display: inline-block;
+        width: 140px;
+        height: 2px;
+        background: #c4c4c4;
+        margin: 0 15px;
+      }
+      .step_by_step .step {
+        cursor: pointer;
+      }
+      .step_by_step .step .step_number {
+        width: 27px;
+        height: 27px;
+        display: inline-flex;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        background: #6c6c6c;
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .step_by_step .step.disabled {
+        opacity: 0.4 !important;
+      }
+      .step_by_step .step.active .step_number {
+        background: #fec900;
+      }
+      .step_by_step .step .step_text {
+        font-size: 18px;
+        margin-left: 6.5px;
+      }
+      .phone_numbers .phone_number {
+        position: relative;
+      }
+      .phone_numbers .phone_number button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .phone_numbers .phone_number input {
+        margin-bottom: 12px;
+      }
+      .descriptions .description .title {
+        position: relative;
+      }
+      .descriptions .description .title input {
+        border: none;
+        background: transparent;
+        height: 40px;
+        color: #969696;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 0;
+      }
+      .descriptions .description .title input::placeholder {
+        font-weight: 400;
+      }
+      .descriptions .description .title button {
+        margin-right: 5px;
+      }
+      .ls-widget .tabs-box .widget-content form.default-form .form-group label {
+        min-width: 180px;
+        display: flex;
+        margin: 0;
+        font-size: 18px;
+        align-items: center;
+      }
+      .chosen-container .chosen-single span {
+        height: 100%;
+      }
+      .btn-style-five {
+        border: 2px solid #cdcdcd;
+        width: 96px !important;
+      }
+
+      #vacancy_form form h4 {
+        font-weight: 600;
+      }
+      .header-black {
+        background-color: #343338;
+      }
+      .page-title {
+        padding: 140px 0 40px !important;
+      }
+      .job-block {
+        height: 86%;
+      }
+      .job-block .inner-box {
+        height: 100%;
+      }
+      .job-block .company-logo img {
+        border-radius: 9px;
+      }
+      #showContact {
+        color: #ffffff;
+        font-size: 18px;
+        padding: 13px 21px;
+      }
+      .phone {
+        opacity: 0;
+        margin-left: -7px;
+        -webkit-transition: all 0.35s ease-in;
+        -moz-transition: all 0.35s ease-in;
+        -o-transition: all 0.35s ease-in;
+        -ms-transition: all 0.35s ease-in;
+        transition: all 0.35s ease-in;
+      }
+      .visible-phone {
+        opacity: 1;
+        margin-left: 0;
+      }
+    </style>
+  </body>
+</html>

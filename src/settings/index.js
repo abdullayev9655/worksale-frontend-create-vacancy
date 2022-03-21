@@ -1,0 +1,1 @@
+export const APIHOST = window.location.origin
