@@ -6,7 +6,7 @@
       <div class="auto-container">
         <div class="dashboard-outer">
           <div class="row">
-            <div class="col-12 pNone  ">
+            <div class="col-12 p-0">
               <!-- Ls widget -->
               <div class="ls-widget">
                 <div class="tabs-box">
@@ -15,48 +15,24 @@
                       <div class="row">
                         <!-- Input -->
                         <div class="form-group col-lg-8 col-md-10 col-12 d-flex formGruopMedia">
-                          <label class="d-none576">Регион</label>
-                          <select class="chosen-select" v-model="$v.value.region.$model" :class="{invalid: $v.value.region.$invalid && $v.value.region.$dirty}">
-                            <option
-                              disabled
-                              selected
-                              style="text-decoration: underline"
-                            >
-                              Выбрать
-                            </option>
-                            <option v-for="(region, index) of regions" :key="index" :value="region._id">{{region.ruName}}</option>
-                          </select>
+                          <label class="d-none576 required_field">Регион</label>
+                          <InputSelect :options="regions" :error="$v.value.region.$error" @change="(data) => $v.value.region.$model = data._id" isSearchable></InputSelect>
                         </div>
                         <div class="form-group col-lg-8 col-md-10 col-12 d-flex formGruopMedia">
                           <label class="d-none576">Адрес</label>
                           <input
                             type="text"
+                            v-model="value.address"
                             placeholder="Шайхантахур, улица Зафарабад, 7-дом"
                           />
                         </div>
                         <div class="form-group col-lg-8 col-md-10 col-12 d-flex formGruopMedia">
                           <label class="d-none576">График работы</label>
-                          <select class="chosen-select">
-                            <option
-                              disabled
-                              selected
-                            >
-                              Выбрать
-                            </option>
-                            <option v-for="(typeOfEmployment, index) of typeOfEmployments" :key="index" :value="typeOfEmployment._id">{{typeOfEmployment.ruName}}</option>
-                          </select>
+                          <InputSelect :options="typeOfEmployments" @change="(data) => value.typeOfEmployment = data._id"></InputSelect>
                         </div>
                         <div class="form-group col-lg-8 col-md-10 col-12 d-flex formGruopMedia">
                           <label class="d-none576">Опыт работы</label>
-                          <select class="chosen-select">
-                            <option
-                              disabled
-                              selected
-                            >
-                              Выбрать
-                            </option>
-                            <option v-for="(experience, index) of experiences" :key="index" :value="experience._id">{{experience.ruName}}</option>
-                          </select>
+                          <InputSelect :options="experiences" @change="(data) => value.experience = data._id"></InputSelect>
                         </div>
                         <div :class="{invalid: !$v.value.tgUsername.required && $v.value.tgUsername.$dirty}" style="margin-top: -10px; padding-top: 10px !important;" class="contact-zone col-lg-8 col-md-10 col-12 p-0">
                           <div class="form-group col-12 d-flex formGruopMedia"
@@ -139,34 +115,36 @@
     </section>
     <form class="default-form navigation_form">
       <div class="row">
-        <div class="form-group d-flex">
-          <label for=""></label>
-          <div class="btn-box mt-5 ml-4">
-            <a
-              @click="prevStep"
-              class="theme-btn btn-style-five btn_prev ml-1"
-              style="
-                width: 145px;
-                height: 45px;
-                color: #343338;
-                font-size: 18px;
-              "
-              ><span class="btn-title">Назад</span></a
-            >
-            <a
-              @click="nextStep"
-              :disabled="$v.value.$invalid"
-              class="theme-btn btn-style-two btn_next"
-              style="
-                width: 175px;
-                height: 45px;
-                color: #343338;
-                font-size: 18px;
-                margin-left: 7px;
-              "
-              :style="{opacity: $v.value.$invalid ? 0.5 : 1}"
-              ><span class="btn-title">Продолжить</span></a
-            >
+        <div class="col-12">
+          <div class="form-group d-flex">
+            <label for=""></label>
+            <div class="btn-box mt-5">
+              <a
+                @click="prevStep"
+                class="theme-btn btn-style-five btn_prev"
+                style="
+                  width: 145px;
+                  height: 45px;
+                  color: #343338;
+                  font-size: 18px;
+                "
+                ><span class="btn-title">Назад</span></a
+              >
+              <a
+                @click.once="nextStep"
+                :disabled="$v.value.$invalid"
+                class="theme-btn btn-style-two btn_next"
+                style="
+                  width: 175px;
+                  height: 45px;
+                  color: #343338;
+                  font-size: 18px;
+                  margin-left: 7px;
+                "
+                :style="{opacity: $v.value.$invalid ? 0.5 : 1}"
+                ><span class="btn-title">Продолжить</span></a
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -175,18 +153,15 @@
 </template>
 
 <script>
-import { APIHOST } from "@/settings"
 import { required, requiredIf, minLength } from 'vuelidate/lib/validators'
-import {TheMask} from 'vue-the-mask'
+import { TheMask } from 'vue-the-mask'
+import InputSelect from '@/components/Inputs/InputSelect'
 
 export default {
-  components: {TheMask},
-  props: {value: Object},
+  components: { TheMask, InputSelect },
+  props: { value: Object, regions: Array, typeOfEmployments: Array, experiences: Array },
   data() {
     return {
-      regions: [],
-      typeOfEmployments: [],
-      experiences: [],
       hexTokens: {
         F: {
           pattern: /[a-zA-Z0-9_]/
@@ -216,56 +191,6 @@ export default {
     }
   },
   methods: {
-    load(){
-      this.getCategories()
-      this.getRegions()
-      this.getExperiences()
-      this.getTypeOfEmployments()      
-    },
-    async getCategories() {
-      let categories = await fetch(`${APIHOST}/api/vacancy/get-categories`).then(data => {
-          if(data.status >= 500) return { success: false, error: "Ошибка при получения данных о категрии с сервера", data: {} }
-          return data.json()
-        })
-      if(categories.success) {
-        this.categories = categories.data
-      }else{ 
-        alert(categories.error)
-      }
-    },
-    async getRegions() {
-      let regions = await fetch(`${APIHOST}/api/vacancy/get-regions`).then(data => {
-          if(data.status >= 500) return { success: false, error: "Ошибка при получения данных о категрии с сервера", data: {} }
-          return data.json()
-        })
-      if(regions.success) {
-        this.regions = regions.data
-      }else{ 
-        alert(regions.error)
-      }
-    },
-    async getExperiences() {
-      let experiences = await fetch(`${APIHOST}/api/vacancy/get-experiences`).then(data => {
-          if(data.status >= 500) return { success: false, error: "Ошибка при получения данных о категрии с сервера", data: {} }
-          return data.json()
-        })
-      if(experiences.success) {
-        this.experiences = experiences.data
-      }else{ 
-        alert(experiences.error)
-      }
-    },
-    async getTypeOfEmployments() {
-      let typeOfEmployments = await fetch(`${APIHOST}/api/vacancy/get-type-of-employments`).then(data => {
-          if(data.status >= 500) return { success: false, error: "Ошибка при получения данных о категрии с сервера", data: {} }
-          return data.json()
-        })
-      if(typeOfEmployments.success) {
-        this.typeOfEmployments = typeOfEmployments.data
-      }else{ 
-        alert(typeOfEmployments.error)
-      }
-    },
     nextStep() {
       this.$v.value.$touch()
       if(!this.$v.value.$invalid) this.$emit("next-step")
@@ -279,11 +204,8 @@ export default {
     },
     deletePhoneNumber(index) {
       if(this.value.phoneNumber.length > 1) this.value.phoneNumber.splice(index, 1)
-    },
+    }
   },
-  created() {
-    this.load()
-  }
 };
 </script>
 
@@ -308,7 +230,7 @@ export default {
   bottom: 0px;
 }
 .invalid.contact-zone::before{
-  content: "Введите хоть одну контакт";
+  content: "Покажите хоть одну контакт";
   position: absolute;
   opacity: 1;
   border-color: rgb(243, 111, 124);
@@ -317,4 +239,5 @@ export default {
   font-weight: 700;
   bottom: 0px;
 }
+
 </style>

@@ -17,6 +17,7 @@ pnpm-debug.log*
 .idea
 .vscode
 *.suo
+*.ps1
 *.ntvs*
 *.njsproj
 *.sln
