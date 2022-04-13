@@ -310,7 +310,7 @@ export default {
           typeOfEmployment: this.form.typeOfEmployment,
           experience: this.form.experience,
           region: this.form.region,
-          lang: 'uz',
+          lang: this.form.lang,
         })
       })
       .then(data => {

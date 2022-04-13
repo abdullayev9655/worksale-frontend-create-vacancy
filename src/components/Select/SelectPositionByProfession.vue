@@ -11,7 +11,7 @@
             </div>
             <div class="block_select_tree">
                 <ul>
-                    <li v-for="(item, index) of items" :key="index">
+                    <li v-for="(item, index) of filteredItems" :key="index">
                         <span @click="item.showPosition = !item.showPosition" class="profession">
                             <span class="icon_chevron">
                                 <svg v-if="!item.showPosition" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
@@ -74,15 +74,23 @@ export default {
         }
     },
     watch: {
-        searchText() {
-            let piece = this.searchText.toUpperCase().split(" ")
-            this.filteredItems = this.items.filter((item) => {
-                let name = item[this.itemText]
-                return piece.every(text => {
-                name = name.toUpperCase()
-                return name.includes(text)
-                })
-            })
+        searchText(after, before) {
+            if(after.trim() !== before.trim()){
+                let copyItems = JSON.parse(JSON.stringify(this.items))
+                let piece = after.trim().toUpperCase().split(" ")
+                if(piece.length){
+                    this.filteredItems = copyItems.filter((prof) => {
+                        prof.positions = prof.positions.filter(pos => {
+                            let posName = pos.ruName.toUpperCase()
+                            return piece.every(word => {
+                                return posName.includes(word)
+                            })
+                        })
+                        return prof.positions.length
+                    })
+                } 
+                else this.filteredItems = copyItems
+            }
         },
     },
     methods: {
@@ -106,7 +114,7 @@ export default {
                 showPosition: item.positions.some(pos => pos._id === this.value.category.positionId && item._id === this.value.category.professionId) ,
             }
         })
-        this.filteredItems = [...this.items]
+        this.filteredItems = JSON.parse(JSON.stringify(this.items))
         this.selected = this.value.category
     }
 }
